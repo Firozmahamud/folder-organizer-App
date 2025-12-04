@@ -1,1 +1,1 @@
-# folder-organizer-pp
+# Folder Organizer App
