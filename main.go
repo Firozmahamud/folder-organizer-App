@@ -27,8 +27,9 @@ func getCategory(ext string) string {
 // Error Checker
 func check(err error) {
 	if err != nil {
-		fmt.Println("\n--------------- 404 invalid path ---------------")
+		fmt.Println("\n--------------- 404 Invalid path ---------------")
 		fmt.Println("\t \tEnter a valid path \n", err, "\n")
+		
 		// return
 		os.Exit(1)
 	}
@@ -51,37 +52,49 @@ func main() {
 
 	//if folder is empty
 	if count == 0 {
-		fmt.Println("This folder is empty.")
+		fmt.Println("\n--------------- Nothing to Organize ---------------")
+		fmt.Println("\n-------------- This folder is empty ---------------\n")
 		return
 
 	}
 
 	//Displaying the total number of files and folders
-	fmt.Println("\n--------------- Total Number of Folder Content ---------------")
+	fmt.Println("\n--------------- Total Number of File/Folder Content ---------------")
 	fmt.Println("            ---------------   ", count, "     ---------------      \n")
 
 	//Displaying the files and folders with index
-	fileCount := 0
-	folderCount := 0
+
+	// fileCount := 0
+	// folderCount := 0
 
 	for _, f := range files {
 		if f.IsDir() {
-			folderCount++
+			switch f.Name() {
+        case "File_Organizer", "Images", "Videos", "Documents", "Audio", "Others":
+            continue
+        }
+			// folderCount++
 			// index := fmt.Sprintf("%02d", folderCount)
 			// fmt.Printf("[Folder]      %s : %s\n", index, f.Name())
-		} else {
-			fileCount++
+		} //else {
+			//fileCount++
 			// index := fmt.Sprintf("%02d", fileCount)
 			// fmt.Printf("[File]        %s : %s\n", index, f.Name())
-		}
+		//}
 
 		//get the File Extension
 		ext := strings.ToLower(filepath.Ext(f.Name()))
 		// fmt.Println("[File Extension] :", ext,"\n")
 		category := getCategory(ext)
 
-		//Create Category Folder if not exists
-		categoryPath := filepath.Join(path, category)
+		// First create main folder inside target folder
+	mainFolder := filepath.Join(path, "File_Organizer")
+	os.MkdirAll(mainFolder, os.ModePerm)
+
+	// fmt.Println("Created:", mainFolder)
+
+		//Create category folder inside file_organizer
+		categoryPath := filepath.Join(mainFolder, category)
 		os.MkdirAll(categoryPath, os.ModePerm)
 
 		//Move the file to the respective category folder
@@ -95,10 +108,10 @@ func main() {
 
 	}
 
-		fmt.Println("\nOrganizing complete!")
+		fmt.Println("\n----------- Organizing completed Successfully -------------")
 	
 }
 
 func init() {
-	fmt.Println("----------- WelCome to Folder Organizer -------------")
+	fmt.Println("----------- WelCome to File Organizer -------------")
 }
